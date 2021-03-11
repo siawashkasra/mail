@@ -1,6 +1,11 @@
 {% extends "mail/layout.html" %}
 {% load static %}
 
+{% block stylesheet %}
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/offcanvas/">
+    <link rel="stylesheet" href="{% static 'mail/inbox.css' %}">
+{% endblock %}
+
 {% block body %}
     <h2>{{ request.user.email }}</h2>
 
@@ -12,6 +17,24 @@
     <hr>
 
     <div id="emails-view">
+        <main class="container">
+            <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
+                <div class="lh-1">
+                <h1 class="h6 mb-0 text-white lh-1 mail_box"></h1>
+                </div>
+            </div>
+
+            <div class="my-3 p-3 bg-body rounded shadow-sm">
+                <h6 class="border-bottom pb-2 mb-0 target">Recent Mails</h6>
+     
+
+                
+                <small class="d-block text-end mt-3">
+                <a href="#">All updates</a>
+                </small>
+            </div>
+        </main>
+
     </div>
 
     <div id="compose-view">
