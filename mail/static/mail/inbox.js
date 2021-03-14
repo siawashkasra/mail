@@ -30,10 +30,9 @@ function load_mailbox(mailbox) {
     .then(response => response.json())
     .then(email => {
 
-                    for(let i = 0; i < email.length; i++) {
-                      
-                        create_email_view(email[i])
-                  }
+        for(let i = 0; i < email.length; i ++) {
+            create_email_view(email[i]);
+        }
         console.log(email);
 
 });
@@ -73,6 +72,11 @@ function send_email(event) {
 }
 
 
+function load_inbox() {
+  
+}
+
+
 function create_email_view(email){
 
   const div = document.createElement("div")
@@ -80,7 +84,7 @@ function create_email_view(email){
   div.classList.add("text-muted")
   div.classList.add("pt-3")
 
-  const svg = document.createElement("svg")
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.classList.add("bd-placeholder-img")
   svg.classList.add("flex-shrink-0")
   svg.classList.add("me-2")
@@ -97,7 +101,7 @@ function create_email_view(email){
   title.innerHTML = "Placeholder"
   svg.appendChild(title)
 
-  const rect = document.createElement("rect")
+  const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
   rect.setAttribute("width", "100%")
   rect.setAttribute("height", "100%")
   rect.setAttribute("fill", "#007bff")
