@@ -24,7 +24,9 @@ function compose_email() {
 }
 
 function load_mailbox(mailbox) {
-
+  // Clear mailbox content before switching to next mailbox
+    clear_DOM()
+    
   fetch('/emails/' + mailbox)
   
     .then(response => response.json())
@@ -70,12 +72,6 @@ function send_email(event) {
   event.preventDefault();
   
 }
-
-
-function load_inbox() {
-  
-}
-
 
 function create_email_view(email){
 
@@ -141,4 +137,21 @@ function create_email_view(email){
   target.after(div)
 
 }
+
+
+function clear_DOM() {
+
+  if(document.contains(document.querySelector(".text-muted"))) {
+    
+    emails = document.querySelectorAll(".text-muted")
+
+      emails.forEach(element => {
+
+        element.remove()
+
+      });
+    }
+      
+  }
+
 
