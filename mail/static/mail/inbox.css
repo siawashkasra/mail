@@ -68,3 +68,8 @@ body {
  }
 
 .bg-purple { background-color: #6f42c1; }
+
+
+.email-item:hover {
+  color: #6f42c1;
+}

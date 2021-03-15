@@ -32,8 +32,11 @@ function load_mailbox(mailbox) {
     .then(response => response.json())
     .then(email => {
 
-        for(let i = 0; i < email.length; i ++) {
+        if(email && email.length > 0) {
+
+          for(let i = 0; i < email.length; i ++) {
             create_email_view(email[i]);
+          }
         }
         console.log(email);
 
@@ -48,7 +51,9 @@ function load_mailbox(mailbox) {
 }
 
 function send_email(event) {
-  
+
+  event.preventDefault();
+
   fetch('/emails', {
     method: 'POST',
     body: JSON.stringify({
@@ -63,22 +68,35 @@ function send_email(event) {
   .then(result => {
       // Print result
       if (result.success) {
+
         load_mailbox('sent');
+
       }
-
-      console.log(result);
   });
-
-  event.preventDefault();
   
 }
 
 function create_email_view(email){
 
   const div = document.createElement("div")
-  div.classList.add("d-flex")
-  div.classList.add("text-muted")
-  div.classList.add("pt-3")
+  div.classList.add("row")
+  div.classList.add("email-item")
+  div.classList.add("my-3")
+  div.classList.add("p-3")
+  div.classList.add("bg-body")
+  div.classList.add("rounded")
+  div.classList.add("shadow-sm")
+
+  const first_div = document.createElement("div")
+  first_div.classList.add("col-lg-4")
+
+  const second_div = document.createElement("div")
+  second_div.classList.add("col-lg-4")
+
+  const third_div = document.createElement("div")
+  third_div.setAttribute("style", "text-align:end")
+  third_div.classList.add("col-lg-4")
+
 
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.classList.add("bd-placeholder-img")
@@ -111,26 +129,47 @@ function create_email_view(email){
   text.innerHTML = "32x32"
   svg.appendChild(text)
 
+  const header = document.createElement("h6")
+  header.textContent=email.subject + " <" + email.sender + ">"
 
+  const timestamp = document.createElement("h6")
+  timestamp.textContent=email.timestamp
+  
   const p = document.createElement("p")
   p.classList.add("pb-3")
   p.classList.add("mb-0")
   p.classList.add("small")
-  p.classList.add("border-bottom")
 
-  const strong = document.createElement("strong")
-  strong.classList.add("d-block")
-  strong.classList.add("text-gray-dark")
-  strong.innerHTML=email.sender
-  p.appendChild(strong)
+  const btn = document.createElement("span")
+  btn.classList.add("badge")
+  btn.classList.add("bg-danger")
+  btn.textContent='Archive'
+ 
   const span = document.createElement("span")
   span.innerHTML=email.body
   p.appendChild(span)
 
-  div.appendChild(p)
+  // Create inner div
+  const div_row = document.createElement("div")
+  div_row.classList.add("row")
+  
+  const col_1 = document.createElement("div")
+  col_1.classList.add("col-lg-9")
 
-  div.appendChild(svg)
-  div.appendChild(p)
+  const col_2 = document.createElement("div")
+  col_2.classList.add("col-lg-3")
+
+  col_1.appendChild(header)
+  col_2.appendChild(btn)
+  div_row.appendChild(col_1)
+  div_row.appendChild(col_2)
+  first_div.appendChild(div_row)
+  
+  div.appendChild(first_div)
+  second_div.appendChild(p)
+  div.appendChild(second_div)
+  third_div.appendChild(timestamp)
+  div.appendChild(third_div)
 
   target = document.querySelector(".target")
   
@@ -141,9 +180,9 @@ function create_email_view(email){
 
 function clear_DOM() {
 
-  if(document.contains(document.querySelector(".text-muted"))) {
+  if(document.contains(document.querySelector(".row"))) {
     
-    emails = document.querySelectorAll(".text-muted")
+    emails = document.querySelectorAll(".row")
 
       emails.forEach(element => {
 
@@ -153,5 +192,7 @@ function clear_DOM() {
     }
       
   }
+
+
 
 
