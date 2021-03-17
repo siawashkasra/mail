@@ -26,20 +26,17 @@ function compose_email() {
 function load_mailbox(mailbox) {
   // Clear mailbox content before switching to next mailbox
     clear_DOM()
-    
+    document.querySelector(".target").style.display = 'block'
   fetch('/emails/' + mailbox)
   
     .then(response => response.json())
     .then(email => {
 
         if(email && email.length > 0) {
-
           for(let i = 0; i < email.length; i ++) {
-            create_email_view(email[i]);
+            create_email_view(email[i], mailbox);
           }
         }
-        console.log(email);
-
 });
   
   // Show the mailbox and hide other views
@@ -76,7 +73,7 @@ function send_email(event) {
   
 }
 
-function create_email_view(email){
+function create_email_view(email, mail_box){
 
   const div = document.createElement("div")
   div.classList.add("row")
@@ -86,6 +83,14 @@ function create_email_view(email){
   div.classList.add("bg-body")
   div.classList.add("rounded")
   div.classList.add("shadow-sm")
+  div.setAttribute("id", email.id)
+
+  if (email.read) {
+
+    div.classList.add("has-been-read")
+  }
+
+  div.setAttribute("onclick", "load_single_email(this.id)")
 
   const first_div = document.createElement("div")
   first_div.classList.add("col-lg-4")
@@ -96,38 +101,6 @@ function create_email_view(email){
   const third_div = document.createElement("div")
   third_div.setAttribute("style", "text-align:end")
   third_div.classList.add("col-lg-4")
-
-
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.classList.add("bd-placeholder-img")
-  svg.classList.add("flex-shrink-0")
-  svg.classList.add("me-2")
-  svg.classList.add("rounded")
-  svg.setAttribute('width', 32)
-  svg.setAttribute("height", 32)
-  svg.setAttribute("xmlns", "http://www.w3.org/2000/svg")
-  svg.setAttribute("role", "img")
-  svg.setAttribute("aria-label", "Placeholder: 32x32")
-  svg.setAttribute("preserveAspectRatio", "xMidYMid slice")
-  svg.setAttribute("focusable", false)
-
-  const title= document.createElement("title")
-  title.innerHTML = "Placeholder"
-  svg.appendChild(title)
-
-  const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-  rect.setAttribute("width", "100%")
-  rect.setAttribute("height", "100%")
-  rect.setAttribute("fill", "#007bff")
-  svg.appendChild(rect)
-
-  const text = document.createElement("text")
-  text.setAttribute('x', "50%")
-  text.setAttribute("y", "50%")
-  text.setAttribute("fill", "#007bff")
-  text.setAttribute("dy", ".3em")
-  text.innerHTML = "32x32"
-  svg.appendChild(text)
 
   const header = document.createElement("h6")
   header.textContent=email.subject + " <" + email.sender + ">"
@@ -140,11 +113,26 @@ function create_email_view(email){
   p.classList.add("mb-0")
   p.classList.add("small")
 
+  
   const btn = document.createElement("span")
+  btn.classList.add("btn")
   btn.classList.add("badge")
   btn.classList.add("bg-danger")
-  btn.textContent='Archive'
- 
+  btn.setAttribute("id", email.id)
+
+  if (mail_box === 'inbox') {
+
+    btn.setAttribute("onclick", "archive_email(this.id)")
+    btn.textContent='Archive'
+  }
+
+  
+  if (mail_box === 'archive') {
+
+    btn.setAttribute("onclick", "unarchive_email(this.id)")
+    btn.textContent='Unarchive'
+  }
+
   const span = document.createElement("span")
   span.innerHTML=email.body
   p.appendChild(span)
@@ -160,7 +148,13 @@ function create_email_view(email){
   col_2.classList.add("col-lg-3")
 
   col_1.appendChild(header)
-  col_2.appendChild(btn)
+
+  if (mail_box === 'inbox' | mail_box === 'archive') {
+
+    col_2.appendChild(btn)
+
+  }
+
   div_row.appendChild(col_1)
   div_row.appendChild(col_2)
   first_div.appendChild(div_row)
@@ -190,9 +184,147 @@ function clear_DOM() {
 
       });
     }
+
+    if(document.contains(document.querySelector(".single-email-view"))) {
+    
+      email = document.querySelector(".single-email-view")
+      email.remove()
+      }
       
   }
 
+function archive_email(id) {
+  document.querySelector(".row").removeAttribute("onclick")
+
+  fetch('/emails/' + id.toString(), {
+    method: 'PUT',
+    body: JSON.stringify({
+        archived: true
+    })
+  })
+
+  .then(response => {
+
+    load_mailbox("inbox")
+  })
+}
 
 
+function unarchive_email(id) {
+  document.querySelector(".row").removeAttribute("onclick")
 
+  fetch('/emails/' + id.toString(), {
+    method: 'PUT',
+    body: JSON.stringify({
+        archived: false
+    })
+  })
+
+  .then(response => {
+
+    load_mailbox("archive")
+  })
+}
+
+
+function read_email(id) {
+
+  fetch('/emails/' + id.toString(), {
+    method: 'PUT',
+    body: JSON.stringify({
+        read: true
+    })
+  })
+}
+
+
+function unread_email(id) {
+
+  fetch('/emails/' + id.toString(), {
+    method: 'PUT',
+    body: JSON.stringify({
+        read: false
+    })
+  })
+
+  .then(response => {
+
+    load_mailbox("inbox")
+  })
+}
+
+
+function load_single_email(id) {
+
+  fetch('/emails/' + id.toString())
+  
+    .then(response => response.json())
+    .then(email => {
+
+      create_single_email_view(email)
+      
+});
+
+}
+  
+function create_single_email_view(email) {
+
+  clear_DOM()
+
+  const div = document.createElement("div")
+  div.classList.add("single-email-view")
+
+  div_row = document.createElement("div")
+  div_row.classList.add("row")
+
+  const col_1 = document.createElement("div")
+  col_1.classList.add("col-lg-6")
+
+  const col_2 = document.createElement("div")
+  col_2.classList.add("col-lg-6")
+  
+  const subject = document.createElement("h4")
+  subject.textContent = email.subject
+
+  const btn = document.createElement("span")
+  btn.classList.add("btn")
+  btn.classList.add("badge")
+  btn.classList.add("bg-info")
+  btn.setAttribute("id", email.id)
+  btn.setAttribute("onclick", "unread_email(this.id)")
+  btn.textContent='Mark as unread'
+
+  col_1.appendChild(subject)
+
+  if(document.querySelector(".mail_box").textContent === 'Inbox') {
+    col_2.appendChild(btn)
+
+  }
+  
+  div_row.appendChild(col_1)
+  div_row.appendChild(col_2)
+
+  const from = document.createElement("h5")
+  from.textContent = email.sender
+
+  const to = document.createElement("h6")
+  to.textContent = email.recipients
+
+  const body = document.createElement("p")
+  body.textContent = email.body
+
+  div.appendChild(div_row)
+  div.appendChild(from)
+  div.appendChild(to)
+  div.appendChild(body)
+
+  target = document.querySelector(".target")
+  target.style.display = 'none'
+  target.after(div)
+
+  if(!email.read) {
+    
+    read_email(email.id)
+
+  }
+}
