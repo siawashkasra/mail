@@ -5,6 +5,7 @@ body {
 
 body {
   padding-top: 56px;
+  background-color: floralwhite;
 }
 
 @media (max-width: 991.98px) {
@@ -117,13 +118,4 @@ input[type='submit'] {
   font-weight: 300;
   color: gray;
   padding-right: 30px;
-}
-
-.body:before {
-
-  content: "Body: ";
-  font-size: 0.8em;
-  font-weight: 300;
-  color: gray;
-  padding-right: 39px;
 }

@@ -298,7 +298,7 @@ function create_single_email_view(email) {
   const btn = document.createElement("span")
   btn.classList.add("btn")
   btn.classList.add("badge")
-  btn.classList.add("bg-info")
+  btn.classList.add("bg-warning")
   btn.setAttribute("id", email.id)
   btn.setAttribute("onclick", "unread_email(this.id)")
   btn.textContent='Mark as unread'
@@ -321,14 +321,51 @@ function create_single_email_view(email) {
   to.classList.add("to")
   to.textContent = email.recipients
 
+  const timestamp = document.createElement("h6")
+  timestamp.classList.add("timestamp")
+  timestamp.textContent = email.timestamp
+
+  const hr = document.createElement("hr")
+
+
+  div_row_2 = document.createElement("div")
+  div_row_2.classList.add("row")
+
+  const col_2_1 = document.createElement("div")
+  col_2_1.classList.add("col-lg-9")
+
+  const col_2_2 = document.createElement("div")
+  col_2_2.classList.add("col-lg-3")
+
   const body = document.createElement("p")
-  body.classList.add("body")
   body.textContent = email.body
+
+  col_2_1.appendChild(body)
+
+
+  const reply = document.createElement("span")
+  reply.classList.add("btn")
+  reply.classList.add("badge")
+  reply.classList.add("bg-success")
+  reply.setAttribute("id", email.id)
+  reply.setAttribute("onclick", "reply_email(this.id)")
+  reply.textContent='Reply'
+
+  if(document.querySelector(".mail_box").textContent === 'Inbox') {
+    col_2_2.appendChild(reply)
+
+  }
+  div_row_2.appendChild(col_2_1)
+  div_row_2.appendChild(col_2_2)
 
   div.appendChild(div_row)
   div.appendChild(from)
   div.appendChild(to)
-  div.appendChild(body)
+  div.appendChild(timestamp)
+  div.append(hr)
+  div.appendChild(div_row_2)
+
+
 
   target = document.querySelector(".target")
   target.style.display = 'none'
@@ -339,4 +376,30 @@ function create_single_email_view(email) {
     read_email(email.id)
 
   }
+}
+
+function reply_email(id) {
+   // Show compose view and hide other views
+   document.querySelector('#emails-view').style.display = 'none';
+   document.querySelector('#compose-view').style.display = 'block';
+ 
+
+   fetch('/emails/' + id.toString(), {
+    method: 'GET',
+  })
+
+  .then(response => response.json())
+  .then(result => {
+        if (result.subject.includes('Re:')) {
+          document.querySelector('#compose-subject').value = result.subject;
+        }
+
+        else {
+          document.querySelector('#compose-subject').value = "Re: " + result.subject;
+        }
+
+        document.querySelector('#compose-recipients').value = result.sender;
+        document.querySelector('#compose-body').value = "On " +  result.timestamp + " " + result.sender + " wrote: " + result.body
+  })
+
 }

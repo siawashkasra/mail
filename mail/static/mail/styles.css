@@ -1,3 +1,36 @@
 textarea {
     min-height: 400px;
 }
+
+.form-register {
+
+    width: 100%;
+    /* max-width: 330px; */
+    padding: 15px;
+    margin: auto;
+    
+  }
+
+  .register {
+
+    width: 100%;
+    padding: 15px;
+    margin: auto;
+    text-align: center;
+  }
+
+  .form-group {
+      padding-top: 10px;
+  }
+
+  input[type='submit'] {
+      margin-top: 10px;
+  }
+
+  p {
+      text-align: center;
+  }
+
+  body {
+    background-color: floralwhite;
+  }
