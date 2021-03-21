@@ -79,3 +79,16 @@ body {
 .has-been-read {
   background-color: #EDEDED !important;
 }
+
+.alert-danger, .alert-success {
+  display: none;
+}
+
+.form-group {
+  padding: 10px 0px 10px 0px;
+}
+
+input[type='submit'] {
+  
+  margin-top: 10px;
+}

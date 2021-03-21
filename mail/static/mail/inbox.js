@@ -61,14 +61,17 @@ function send_email(event) {
     })
   })
 
-  .then(response => response.json())
-  .then(result => {
-      // Print result
-      if (result.success) {
+  .then(response => {
 
-        load_mailbox('sent');
+    if(response.status == 201 | response.status == 200) {
+      load_mailbox("sent")
+      document.querySelector(".alert-success").style.display ='block'
+    }
 
-      }
+    else if(response.status == 400) {
+      document.querySelector(".alert-danger").style.display ='block'
+    }
+
   });
   
 }
@@ -190,6 +193,11 @@ function clear_DOM() {
       email = document.querySelector(".single-email-view")
       email.remove()
       }
+
+    if(document.contains(document.querySelector(".alert-success"))) {
+      alert = document.querySelector(".alert-success")
+      alert.remove()
+    }
       
   }
 

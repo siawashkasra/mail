@@ -17,6 +17,7 @@
     <hr>
 
     <div id="emails-view">
+    <div class="alert alert-success" role="alert">Email has been sent successfully!</div>
         <main class="container">
             <div class="d-flex align-items-center p-3 my-3 text-white bg-purple rounded shadow-sm">
                 <div class="lh-1">
@@ -26,30 +27,29 @@
 
             <div class="my-3 p-3 bg-body rounded shadow-sm">
                 <h6 class="pb-2 mb-0 target">Recent Mails</h6>
-     
-                {% comment %} <small class="d-block text-end mt-3">
-                <a href="#">All updates</a>
-                </small> {% endcomment %}
-                
+
             </div>
         </main>
 
     </div>
 
     <div id="compose-view">
+        <div class="alert alert-danger" role="alert">This email doesn't exist in our databases!</div>
         <h3>New Email</h3>
         <form id="compose-form">
             <div class="form-group">
-                From: <input disabled class="form-control" value="{{ request.user.email }}">
+            <span>From: </span><input disabled class="form-control" value="{{ request.user.email }}">
             </div>
             <div class="form-group">
-                To: <input id="compose-recipients" class="form-control" required>
+                <span>To: </span><input id="compose-recipients" class="form-control" required>
             </div>
             <div class="form-group">
+                <span>Subject: </span>
                 <input class="form-control" id="compose-subject" placeholder="Subject" required>
             </div>
+                <span>Body: </span>
             <textarea class="form-control" id="compose-body" placeholder="Body" required></textarea>
-            <input type="submit" class="btn btn-primary"/>
+            <input type="submit" class="btn btn-success"/>
         </form>
     </div>
 {% endblock %}
