@@ -31,9 +31,9 @@ function load_mailbox(mailbox) {
   
     .then(response => response.json())
     .then(email => {
-
-        if(email && email.length > 0) {
-          for(let i = 0; i < email.length; i ++) {
+      
+        if(email && email.length >= 0) {
+          for(let i = email.length - 1; i >= 0; i --) {
             create_email_view(email[i], mailbox);
           }
         }
