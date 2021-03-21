@@ -89,6 +89,41 @@ body {
 }
 
 input[type='submit'] {
-  
+
   margin-top: 10px;
+}
+
+.subject:before {
+
+  content: "Subject: ";
+  font-size: 0.8em;
+  font-weight: 300;
+  color: gray;
+  padding-right: 3px;
+}
+
+.to:before {
+
+  content: "To: ";
+  font-size: 0.8em;
+  font-weight: 300;
+  color: gray;
+  padding-right: 55px;
+}
+
+.from:before {
+  content: "From: ";
+  font-size: 0.8em;
+  font-weight: 300;
+  color: gray;
+  padding-right: 30px;
+}
+
+.body:before {
+
+  content: "Body: ";
+  font-size: 0.8em;
+  font-weight: 300;
+  color: gray;
+  padding-right: 39px;
 }

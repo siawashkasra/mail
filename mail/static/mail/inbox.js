@@ -286,12 +286,13 @@ function create_single_email_view(email) {
   div_row.classList.add("row")
 
   const col_1 = document.createElement("div")
-  col_1.classList.add("col-lg-6")
+  col_1.classList.add("col-lg-9")
 
   const col_2 = document.createElement("div")
-  col_2.classList.add("col-lg-6")
+  col_2.classList.add("col-lg-3")
   
   const subject = document.createElement("h4")
+  subject.classList.add("subject")
   subject.textContent = email.subject
 
   const btn = document.createElement("span")
@@ -313,12 +314,15 @@ function create_single_email_view(email) {
   div_row.appendChild(col_2)
 
   const from = document.createElement("h5")
+  from.classList.add("from")
   from.textContent = email.sender
 
   const to = document.createElement("h6")
+  to.classList.add("to")
   to.textContent = email.recipients
 
   const body = document.createElement("p")
+  body.classList.add("body")
   body.textContent = email.body
 
   div.appendChild(div_row)
